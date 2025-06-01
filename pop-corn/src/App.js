@@ -48,6 +48,10 @@ const tempWatchedData = [
   },
 ];
 
+const average = (arr)=> arr.reduce((acc,cur)=> acc + cur / arr.length , 0)
+
+
+
 function App() {
   return (
     <div>
@@ -127,9 +131,12 @@ function ListBox() {
 }
 
 function MovieList() {
+const [movies , setMovies] = useState(tempMovieData)
+
+  
   return (
     <div>
-      {tempMovieData.map((movie) => {
+      {movies.map((movie) => {
         return (
           <div className="movie-card" key={movie.imdbID} >
             <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -147,9 +154,98 @@ function MovieList() {
 }
 
 function WatchedBox() {
+  const [watched , setWatched] = useState(tempWatchedData)
+  const [isOpen2 , setIsOpen2] = useState(true) ; 
+
   return (
-    <div className="box">
-      <h1>watched box</h1>
+    <div  className="box">
+    <button className="btn-toggle"  
+    onClick={()=> setIsOpen2((open)=> !open )}
+    >
+      {isOpen2 ? "-" : "+"}
+    </button>
+
+
+{isOpen2 && 
+<>
+   <WatchedSummary watched={watched} />
+   <WatchedMovieList watched={watched}/>
+
+</>
+
+
+}
+
     </div>
   );
+}
+
+
+function WatchedSummary ({watched}){
+  const avgImdbRating = average(watched.map((movie)=> movie.imdbRating))  
+  const avgUserRating = average (watched.map((movie)=>movie.userRating)) 
+  const avgRuntime = average(watched.map((movie)=> movie.runtime))
+
+
+  return <div className="summary">
+  <h2>Movies you watched</h2>
+  <div className="summary-header">
+    <p>
+      <span>*️⃣</span>
+      <span>{watched.length} movies</span>
+    </p>
+
+    <p>
+      <span>⭐</span>
+      <span>{avgImdbRating}</span>
+
+    </p>
+
+    <p>
+      <span>🌟</span>
+      <span>{avgUserRating}</span>
+    </p>
+
+    <p>
+      <span>⌛</span>
+      <span>{avgRuntime} min</span>
+
+    </p>
+  </div>
+  </div>
+}
+
+
+
+function WatchedMovieList ({watched}){
+return <div>
+{watched.map((movie)=> {
+  return <div className="watched-movie-card">
+ <img src={movie.Poster} alt={`${movie.Title} poster`}  />
+
+ <div>
+ <h3>{movie.Title}</h3>
+ <div className="summary-info">
+  <p>
+    <span>⭐</span>
+    <span>{movie.imdbRating}</span>
+  </p>
+
+    <p>
+    <span>🌟</span>
+    <span>{movie.userRating}</span>
+  </p>
+
+    <p>
+    <span>⌛</span>
+    <span>{movie.runtime} min</span>
+  </p>
+ </div>
+
+ </div>
+
+
+  </div>
+})}
+</div>
 }

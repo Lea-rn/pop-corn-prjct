@@ -16,7 +16,8 @@
 }
 
 body {
-  background-color: var(--color-background-900);
+  /* background-color: var(--color-background-900); */
+ 
 }
 
 .nav-bar {

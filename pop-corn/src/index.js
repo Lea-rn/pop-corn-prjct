@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import StartRating from './StartRating';
+import BehindtheSc from './BehindtheSc';
 
 function Test () {
   const [movieRating , setMovieRating] = useState(0)
@@ -18,16 +19,18 @@ root.render(
     {/* <StartRating maxRating={5} messages= {
       ["Terrible" , "Bad" , "Okay" , "Good" , "Amazing"]
     }  />    */}
-
+{/* 
     <StartRating  maxRating={2} color='green' />
     <StartRating/>
  
  
-<Test/>
+<Test/> */}
  
    
 
     {/* <App /> */}
+
+    <BehindtheSc/>
   </React.StrictMode>
 );
 

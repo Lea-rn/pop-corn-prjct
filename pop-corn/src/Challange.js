@@ -1,4 +1,4 @@
-export default function Challange (){
+export default function Task (){
     return 
     <div>
     <TextExpender>

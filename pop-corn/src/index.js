@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import StartRating from './StartRating';
 import BehindtheSc from './BehindtheSc';
+import Appcopy from './Appcopy';
 
 function Test () {
   const [movieRating , setMovieRating] = useState(0)
@@ -16,21 +17,7 @@ function Test () {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <StartRating maxRating={5} messages= {
-      ["Terrible" , "Bad" , "Okay" , "Good" , "Amazing"]
-    }  />    */}
-{/* 
-    <StartRating  maxRating={2} color='green' />
-    <StartRating/>
- 
- 
-<Test/> */}
- 
-   
-
-    {/* <App /> */}
-
-    <BehindtheSc/>
+ <Appcopy/>
   </React.StrictMode>
 );
 

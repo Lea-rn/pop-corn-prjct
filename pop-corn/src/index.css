@@ -19,7 +19,7 @@
 }
 
 body {
-  /* background-color: var(--color-background-900); */
+  background-color: var(--color-background-900);
  
 }
 
@@ -160,4 +160,12 @@ justify-content: center;
   margin-right: 30px;
   margin-top: 20px;
  
+}
+
+
+.loader , .error {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
 }

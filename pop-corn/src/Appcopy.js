@@ -59,20 +59,34 @@ function Appcopy() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading , setIsLoading] = useState(false)
   const [error , setError] = useState("")
+    const [query, setQuery] = useState("");
+    const [selectedId , setSelectedId] = useState(null) ;
   const Key = "d997c473"
-  const query = "king"
+  // const tempQuery = "batman"
+
+ 
+
+function handleSelectMovie (id){
+setSelectedId (id)
+}
+
    
   useEffect( function(){
   
     async  function fetchMovies () {
       try {
      setIsLoading(true)
+     setError("")
      const res = await fetch (`http://www.omdbapi.com/?apikey=${Key}&s=${query}`)
 
     
      const data = await res.json() 
-    console.log(data)
-     setMovies(data.Search)
+
+     if (data.Response === "False") throw new Error ("Movie not found")
+            setMovies(data.Search)
+          console.log(data.Search)
+
+    
    
       } catch (err){
         setError(err.message)
@@ -81,10 +95,16 @@ function Appcopy() {
       }
  
     }
+
+    if (query.length<3){
+      setMovies([]) ; 
+      setError("") 
+      return ; 
+    }
     
     fetchMovies()
 
-  },[])
+  },[query])
 
 
 
@@ -95,7 +115,7 @@ function Appcopy() {
 
       <Navbar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <Numresults movies={movies} />
       </Navbar>
 
@@ -105,23 +125,24 @@ function Appcopy() {
       <Main>
         <ListBox>
           {isLoading && <Loader/>}
-          {!isLoading && !error && <MovieList movies={movies}/> }
+          {!isLoading && !error && <MovieList movies={movies}  onSelectMovie={handleSelectMovie} /> }
           {error && <ErrorMessage message={error}/>}
         {/* {isLoading ? <Loader/> :   <MovieList movies={movies}/> }  */}
         </ListBox>
 
         {/* ////// prop drilling ::  */}
 
-        <WatchedBox
-          element={
-            <>
-           
-              <WatchedSummary watched={watched} />
+        <WatchedBox> 
+          {selectedId ? (
+            <MovieDetails selectedId={selectedId}/>
+          ) : (
+       <>
+            <WatchedSummary watched={watched} />
               <WatchedMovieList watched={watched} />
-            
-            </>
-          }
-        />
+       </>
+          ) }
+
+        </WatchedBox>
       </Main>
     </div>
   );
@@ -152,8 +173,8 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({query , setQuery}) {
+
   return (
     <input
       className="search"
@@ -194,27 +215,34 @@ function ListBox({ children }) {
   );
 }
 
-function MovieList({ movies }) {
+function MovieList({ movies , onSelectMovie }) {
   return (
     <div>
       {movies.map((movie) => {
         return (
-          <div className="movie-card" key={movie.imdbID}>
-            <img src={movie.Poster} alt={`${movie.Title} poster`} />
-            <div>
-              <h3>{movie.Title}</h3>
-
-              <span>📅</span>
-              <span>{movie.Year}</span>
-            </div>
-          </div>
+        
+           <Movie  movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
+         
         );
       })}
     </div>
   );
 }
 
-function WatchedBox({element}) {
+function Movie ({movie , onSelectMovie}){
+  return <div className="movie-card" onClick={()=> onSelectMovie(movie.imdbID)}>
+       <img src={movie.Poster} alt={`${movie.Title} poster`} />
+            <div>
+              <h3>{movie.Title}</h3>
+
+              <span>📅</span>
+              <span>{movie.Year}</span>
+            </div>
+
+  </div>
+}
+
+function WatchedBox({children}) {
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
@@ -226,10 +254,15 @@ function WatchedBox({element}) {
         {isOpen2 ? "-" : "+"}
       </button>
 
-      {isOpen2 &&  element
+      {isOpen2 &&  children
       }
     </div>
   );
+}
+
+
+function MovieDetails ({selectedId}){
+  return <div className="details">{selectedId}</div>
 }
 
 function WatchedSummary({ watched }) {
@@ -298,3 +331,20 @@ function WatchedMovieList({ watched }) {
     </div>
   );
 }
+
+
+
+
+  //  useEffect (function (){
+  //   console.log("After initial render")
+  //  }, []) 
+
+  //  useEffect (function (){
+  //   console.log("After every render")
+  //  })
+
+  //  console.log("During render") ;  
+  
+  //  useEffect (function (){
+  //    console.log("D")
+  //  }, [query])

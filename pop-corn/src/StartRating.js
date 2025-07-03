@@ -3,11 +3,13 @@ import { useState } from "react";
 const containerStyle = {
   display: "flex",
   alignItems: "center",
-  gap: "16px",
+    marginLeft : "30px"
+  
+ 
 };
 const starContainerStyle = {
   display: "flex",
-  gap: "4px",
+  
 };
 
 ///// falsy values : null , undefined , 0 , NaN , false

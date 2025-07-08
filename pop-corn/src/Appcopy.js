@@ -9,6 +9,7 @@ import WatchedBox from "./componenets/WatchedBox";
 import MovieDetails from "./componenets/MovieDetails";
 import WatchedSummary from "./componenets/WatchedSummary";
 import WatchedMovieList from "./componenets/WatchedMovieList";
+import Loader from "./componenets/Loader";
 
 const tempMovieData = [
   {
@@ -76,6 +77,10 @@ function Appcopy() {
     setSelectedId((selectedID) => (id === selectedID ? null : id));
   }
 
+  function handleAddWatched (movie){
+ setWatched ((old)=> [...old , movie])
+  }
+
   function handleCloseMovie() {
     setSelectedId(null);
   }
@@ -141,6 +146,8 @@ function Appcopy() {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
+              
             />
           ) : (
             <>
@@ -160,9 +167,7 @@ export default Appcopy;
 
 
 
-function Loader() {
-  return <p className="loader">Loading ...</p>;
-}
+
 
 function ErrorMessage({ message }) {
   return (

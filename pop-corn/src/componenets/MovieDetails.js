@@ -1,8 +1,11 @@
 import { useState , useEffect } from "react";
 import StartRating from "../StartRating";
+import Loader from "./Loader";
 
-export default function MovieDetails({ selectedId, onCloseMovie }) {
+export default function MovieDetails({ selectedId, onCloseMovie , onAddWatched }) {
   const [movie, setMovie] = useState({});
+  const [isLoading , setIsLoading] = useState(false)
+  const [userRating , setUserRating] = useState("")
   const Key = "d997c473";
 
   const {
@@ -18,19 +21,40 @@ export default function MovieDetails({ selectedId, onCloseMovie }) {
     Plot : plot
   } = movie;
 
+ function handleADD (){
+    const newWatchedMovie = {
+        poster  , 
+        title , 
+        year , 
+        runtime , 
+        imdbRating , 
+        userRating
+
+    }
+    onAddWatched(newWatchedMovie)
+    onCloseMovie()
+ }
+
   useEffect(function () {
     async function getMovieDetails() {
+        setIsLoading(true)
       const res = await fetch(
         `http://www.omdbapi.com/?apikey=${Key}&i=${selectedId}`
       );
       const data = await res.json();
       setMovie(data)
+      setIsLoading(false)
     }
     getMovieDetails();
   }, [selectedId]);
 
   return (
-    <div className="details">
+
+   <>
+    {isLoading ? <Loader/> : 
+
+           <div className="details">
+
       <span className="btn-back" onClick={onCloseMovie}>
         ⬅️
       </span>
@@ -53,8 +77,8 @@ export default function MovieDetails({ selectedId, onCloseMovie }) {
       <section className="footer-movie-info">
      
      <div className="rating">
-   <StartRating size={24}/>
-   <button>+ Add to list</button>
+   <StartRating size={24} onSetNewComponentRating={setUserRating} />
+   <button onClick={()=>handleADD()}>+ Add to list</button>
      </div>
 
         <p style={{marginBottom:"10px"}}>
@@ -67,5 +91,9 @@ export default function MovieDetails({ selectedId, onCloseMovie }) {
       </section>
      </div>
     </div>
+     }
+ 
+   
+   </>
   );
 }

@@ -4,7 +4,7 @@ export default function WatchedMovieList({ watched }) {
       {watched.map((movie) => {
         return (
           <div className="watched-movie-card" key={movie.imdbID}>
-            <img src={movie.Poster} alt={`${movie.Title} poster`} />
+            <img src={movie.poster} alt={`${movie.title} poster`} />
 
             <div>
               <h3>{movie.Title}</h3>
@@ -21,7 +21,7 @@ export default function WatchedMovieList({ watched }) {
 
                 <p>
                   <span>⌛</span>
-                  <span>{movie.runtime} min</span>
+                  <span>{movie.runtime} </span>
                 </p>
               </div>
             </div>
